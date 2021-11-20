@@ -1,4 +1,5 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, FormEvent } from "react";
+import { useRef, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 
 interface TaskFormProps {
@@ -8,13 +9,29 @@ interface TaskFormProps {
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ taskName, taskEdited, taskAdded }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  const onSubmitHandler = (event: FormEvent): void => {
+    event.preventDefault();
+    taskAdded();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
-    <div className='task-form'>
-      <input type='text' placeholder='Add your new task' value={taskName} onChange={taskEdited} />
-      <button className='btn-add' onClick={taskAdded}>
+    <form className="task-form" onSubmit={onSubmitHandler}>
+      <input type="text" placeholder="Add your new task" value={taskName} ref={inputRef} onChange={taskEdited} />
+      <button className="btn-add" onClick={onSubmitHandler}>
         <FaPlus />
       </button>
-    </div>
+    </form>
   );
 };
 

@@ -1,4 +1,5 @@
 export interface ITask {
-  name: string,
+  id: string,
+  taskName: string,
   isDone: boolean
 }
